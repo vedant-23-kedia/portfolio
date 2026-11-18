@@ -296,7 +296,7 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
       <div class="facts">
         <div class="fact"><span>Status</span><b>Open to 2027 roles</b></div>
         <div class="fact"><span>Focus</span><b>AI/ML · Backend</b></div>
-        <div class="fact"><span>Shipped</span><b>7 projects</b></div>
+        <div class="fact"><span>Shipped</span><b>8 projects</b></div>
         <div class="fact"><span>Internships</span><b>2 completed</b></div>
         <div class="fact"><span>Graduating</span><b>B.Tech CSE, 2027</b></div>
       </div>
@@ -343,29 +343,52 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
       <div class="bhd"><span>No.</span><span>Project</span><span>Stack</span><span>Status</span><span></span></div>
 
       <div class="row2">
-        <button class="rowbtn" type="button" aria-expanded="true" aria-controls="p1">
+        <button class="rowbtn" type="button" aria-expanded="true" aria-controls="plens">
           <span class="ix">01</span>
-          <span class="ttl">OmniReach<small>Customer engagement automation · Oct 2026 — present</small></span>
+          <span class="ttl">LectureLens<small>Multimodal lecture → study notes · Nov 2026 — present</small></span>
+          <span class="stk">PyTorch · faster-whisper · PaddleOCR · TrOCR · OpenCV</span>
+          <span class="stat bld">Building</span>
+          <span class="chev">+</span>
+        </button>
+        <div class="panel" id="plens">
+          <span></span>
+          <div>
+            <ul>
+              <li>A lecture video goes in; structured notes, timestamped chapters, a quiz and a concept map come out.</li>
+              <li>Most summarisers listen only to audio and lose every equation on the board — this reads the board as a second modality and fuses the two on the timeline.</li>
+              <li>Two routers do the real work, and both are gating networks I train and measure, not LLM prompts: a board router (CLIP → fine-tuned MobileNetV3) picking printed vs handwriting vs equation vs diagram, and a transcript router (TF-IDF → fine-tuned DistilBERT) tagging definitions, examples and derivations.</li>
+              <li>Transcript-guided vocabulary correction repairs OCR output, then confidence-weighted fusion aligns both modalities.</li>
+            </ul>
+            <div class="plink"><a href="https://github.com/vedant-23-kedia/LectureLens" target="_blank" rel="noopener">Source →</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p1">
+          <span class="ix">02</span>
+          <span class="ttl">OmniReach<small>Multi-tenant AI agent platform · Oct 2026 — present</small></span>
           <span class="stk">Python · FastAPI · PostgreSQL · Docker · Gemini</span>
           <span class="stat live">Live</span>
           <span class="chev">+</span>
         </button>
-        <div class="panel" id="p1">
+        <div class="panel" id="p1" hidden>
           <span></span>
           <div>
             <ul>
+              <li>One deployment serves many businesses, with every business's leads, conversations and credentials isolated from every other's.</li>
               <li>Automates customer conversations across WhatsApp, Instagram and Messenger from one scheduling layer.</li>
-              <li>Gathered requirements straight from a startup client, including approval workflows so nothing publishes unreviewed.</li>
-              <li>Modeled enquiries and meeting dates in PostgreSQL, with scheduled jobs producing daily summary reports.</li>
+              <li>Gathered requirements straight from a startup client, including approval gates so nothing publishes unreviewed.</li>
+              <li>Modeled enquiries and meeting dates in PostgreSQL behind Alembic migrations, with scheduled jobs producing daily summary reports.</li>
             </ul>
-            <div class="plink"><span>Client work · private repository</span></div>
+            <div class="plink"><a href="https://github.com/vedant-23-kedia/omnireach" target="_blank" rel="noopener">Source →</a></div>
           </div>
         </div>
       </div>
 
       <div class="row2">
         <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p2">
-          <span class="ix">02</span>
+          <span class="ix">03</span>
           <span class="ttl">AppliTrack<small>Workflow tracking &amp; reporting · 2026</small></span>
           <span class="stk">Python · Flask · SQLite · Pub/Sub · Docker</span>
           <span class="stat shp">Shipped</span>
@@ -387,7 +410,7 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
 
       <div class="row2">
         <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p3">
-          <span class="ix">03</span>
+          <span class="ix">04</span>
           <span class="ttl">PromptGuard<small>AI monitoring &amp; audit layer · 2026</small></span>
           <span class="stk">Python · Ollama · ChromaDB · Embeddings</span>
           <span class="stat bld">Building</span>
@@ -408,7 +431,7 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
 
       <div class="row2">
         <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p4">
-          <span class="ix">04</span>
+          <span class="ix">05</span>
           <span class="ttl">GhostTrace Sentinel<small>Code governance dashboard · 2026</small></span>
           <span class="stk">JavaScript · HTML · LLM · Git</span>
           <span class="stat shp">Shipped</span>
@@ -469,7 +492,7 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
     <div class="sh"><span class="n">04</span><h2>Stack</h2><span class="r"></span><span class="t">what I reach for</span></div>
     <div class="stack">
       <div class="sg"><h3>Languages</h3><ul><li>Python</li><li>SQL</li><li>C</li><li>C++</li><li>JavaScript</li><li>HTML/CSS</li></ul></div>
-      <div class="sg"><h3>AI &amp; ML</h3><ul><li>LLM Integration</li><li>Google Gemini</li><li>Ollama</li><li>Vector Embeddings</li><li>ChromaDB</li><li>Prompt Safety</li></ul></div>
+      <div class="sg"><h3>AI &amp; ML</h3><ul><li>PyTorch</li><li>Transformers</li><li>LLM Integration</li><li>Google Gemini</li><li>Ollama</li><li>Vector Embeddings</li><li>ChromaDB</li><li>OCR / TrOCR</li><li>Whisper</li><li>OpenCV</li><li>Prompt Safety</li></ul></div>
       <div class="sg"><h3>Backend &amp; Data</h3><ul><li>FastAPI</li><li>Flask</li><li>PostgreSQL</li><li>SQLite</li><li>REST APIs</li><li>Pub/Sub</li><li>Pandas</li></ul></div>
       <div class="sg"><h3>Tooling</h3><ul><li>Docker</li><li>Git</li><li>GitHub</li><li>Postman</li><li>Power BI</li><li>Tableau</li><li>Figma</li></ul></div>
       <div class="sg"><h3>Practice</h3><ul><li>Requirement Elicitation</li><li>Functional Specs</li><li>Workflow Mapping</li><li>System Testing</li><li>UAT</li><li>Defect Tracking</li></ul></div>
@@ -590,7 +613,7 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
   });
 
   /* ---- rotating role ---- */
-  var words=['automation platforms','LLM guardrails','data pipelines','things that run at 3am','APIs people trust'];
+  var words=['multimodal NLP systems','LLM guardrails','automation platforms','data pipelines','things that run at 3am','APIs people trust'];
   var rot=document.getElementById('rot'),ri=0;
   if(rot&&!reduce){
     setInterval(function(){
@@ -601,7 +624,7 @@ footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;pa
   }
 
   /* ---- ticker ---- */
-  var items=['Python','FastAPI','PostgreSQL','Docker','Google Gemini','Ollama','ChromaDB','Flask','SQL','Pub/Sub',
+  var items=['Python','PyTorch','FastAPI','PostgreSQL','Docker','Google Gemini','Ollama','ChromaDB','PaddleOCR','faster-whisper','Flask','SQL','Pub/Sub',
              'Requirement Elicitation','System Testing','UAT','Power BI','Pandas','Workflow Mapping','REST APIs'];
   var track=document.getElementById('track');
   if(track){
