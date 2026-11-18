@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vedant Kedia</title>
+<meta name="description" content="Vedant Kedia — AI/ML engineer. Automation platforms, LLM guardrails and data pipelines. B.Tech CSE, UPES Dehradun, 2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Concept: a printed operations board. Everything Vedant builds moves a record through states,
+   so the page is a status board — bone paper, ink rules, one ultramarine signal, one orange alert.
+   Layout: full-bleed bands separated by hairlines; work section is a board of status rows. */
+:root{
+  color-scheme:light;
+  --paper:#F6F4EF;
+  --paper2:#EDEAE2;
+  --ink:#0C0C0E;
+  --ink70:#44444B;
+  --ink45:#7A7A82;
+  --rule:#0C0C0E;
+  --hair:rgba(12,12,14,.16);
+  --blue:#1E2BF0;
+  --orange:#FF4A1C;
+  --green:#00794A;
+  --disp:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  --serif:"Instrument Serif",Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--disp);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(rgba(12,12,14,.055) 1px,transparent 1px);
+  background-size:4px 4px;
+}
+h1,h2,h3,h4{margin:0;font-weight:800;letter-spacing:-.035em;line-height:.95;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+::selection{background:var(--blue);color:#fff}
+:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px}
+.band{border-bottom:1.5px solid var(--rule)}
+.in{
+  max-width:1280px;margin:0 auto;
+  padding-left:max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+}
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink45)}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--ink);color:var(--paper)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ink);z-index:41}
+.top .in{display:flex;align-items:center;gap:18px;padding-block:10px;flex-wrap:wrap}
+.top .nm{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.top .st{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B9B9C2;display:flex;align-items:center;gap:8px}
+.blip{width:7px;height:7px;border-radius:50%;background:#2BE07A;box-shadow:0 0 0 0 rgba(43,224,122,.7);animation:pulse 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(43,224,122,0)}100%{box-shadow:0 0 0 0 rgba(43,224,122,0)}}
+.top .sp{flex:1}
+.wa{
+  display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#06270F;text-decoration:none;
+  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:8px 14px;border-radius:2px;border:1.5px solid #0C0C0E;
+}
+.wa:hover{background:#1FBE5B}
+.wa svg{width:14px;height:14px;fill:currentColor}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(34px,6vw,70px) clamp(28px,4vw,46px);position:relative;overflow:hidden}
+.heroTop{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:clamp(18px,3vw,34px)}
+.flip{
+  font-family:var(--disp);font-weight:900;
+  font-size:clamp(50px,13.2vw,186px);line-height:.82;letter-spacing:-.055em;
+  display:block;word-break:break-word;
+}
+.flip .ch{display:inline-block;will-change:transform}
+.flip .l2{display:block;color:var(--blue);-webkit-text-stroke:0}
+.heroGrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:end;margin-top:clamp(20px,3vw,36px)}
+@media (max-width:900px){.heroGrid{grid-template-columns:1fr;align-items:start}}
+.roleline{font-family:var(--disp);font-weight:600;font-size:clamp(19px,2.5vw,30px);letter-spacing:-.02em;line-height:1.15}
+.roleline .rot{color:var(--blue);display:inline-block;min-width:1ch}
+.roleline .cur{display:inline-block;width:3px;height:1em;background:var(--orange);translate:0 .14em;animation:bl .9s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.sub{margin-top:14px;color:var(--ink70);max-width:56ch;font-size:16px}
+.facts{display:grid;gap:0;border:1.5px solid var(--rule);background:var(--paper2)}
+.fact{display:flex;justify-content:space-between;gap:14px;padding:9px 13px;border-bottom:1px solid var(--hair);font-family:var(--mono);font-size:12px}
+.fact:last-child{border-bottom:0}
+.fact b{font-weight:600}
+.fact span{color:var(--ink45);letter-spacing:.1em;text-transform:uppercase;font-size:11px}
+.heroCta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-block;text-decoration:none;font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;padding:13px 20px;border:1.5px solid var(--rule);
+  background:var(--blue);color:#fff;border-radius:2px;cursor:pointer;box-shadow:4px 4px 0 var(--ink);
+  transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn.alt{background:var(--paper);color:var(--ink)}
+.btn.dark{background:var(--ink);color:var(--paper)}
+
+/* ---------- ticker ---------- */
+.ticker{background:var(--ink);color:var(--paper);overflow:hidden;padding-block:11px}
+.track{display:flex;gap:34px;width:max-content;animation:slide 38s linear infinite;font-family:var(--mono);
+  font-size:12px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.track i{font-style:normal;color:var(--orange)}
+@keyframes slide{to{transform:translateX(-50%)}}
+.ticker:hover .track{animation-play-state:paused}
+
+/* ---------- section heads ---------- */
+section{scroll-margin-top:62px}
+.sh{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-block:clamp(30px,4vw,48px) 22px}
+.sh .n{font-family:var(--mono);font-size:12px;color:var(--blue);letter-spacing:.2em;padding-bottom:6px}
+.sh h2{font-size:clamp(30px,5.4vw,60px);letter-spacing:-.045em;font-weight:900;text-transform:uppercase}
+.sh .r{flex:1;height:1.5px;background:var(--rule);margin-bottom:12px;min-width:30px}
+.sh .t{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink45);padding-bottom:8px}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(22px,4vw,54px);padding-bottom:clamp(34px,5vw,60px)}
+@media (max-width:900px){.about{grid-template-columns:1fr}}
+.quote{font-family:var(--serif);font-size:clamp(25px,3.6vw,41px);line-height:1.12;letter-spacing:-.015em;margin-bottom:22px}
+.quote em{font-style:italic;color:var(--blue)}
+.about p{color:var(--ink70);max-width:58ch}
+.about p+p{margin-top:13px}
+.spec{border:1.5px solid var(--rule);background:#fff}
+.spec .hd{background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;padding:9px 14px}
+.spec dl{margin:0;padding:4px 0}
+.spec .row{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:8px 14px;border-bottom:1px solid var(--hair);font-size:13.5px}
+.spec .row:last-child{border-bottom:0}
+.spec dt{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink45);padding-top:2px}
+.spec dd{margin:0;font-weight:500}
+
+/* ---------- board ---------- */
+.board{border:1.5px solid var(--rule);background:#fff;margin-bottom:clamp(30px,4vw,52px)}
+.bhd{display:grid;grid-template-columns:52px minmax(0,2.1fr) minmax(0,1.4fr) 128px 34px;gap:14px;
+  background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
+  text-transform:uppercase;padding:10px 16px}
+@media (max-width:860px){.bhd{display:none}}
+.row2{border-bottom:1px solid var(--hair)}
+.row2:last-child{border-bottom:0}
+.rowbtn{
+  width:100%;background:transparent;border:0;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  display:grid;grid-template-columns:52px minmax(0,2.1fr) minmax(0,1.4fr) 128px 34px;gap:14px;
+  align-items:center;padding:17px 16px;transition:background .15s;
+}
+.rowbtn:hover{background:var(--paper2)}
+.rowbtn[aria-expanded="true"]{background:var(--paper2)}
+@media (max-width:860px){.rowbtn{grid-template-columns:40px minmax(0,1fr) 28px;row-gap:8px}
+  .rowbtn .stk{grid-column:2/4}.rowbtn .stat{grid-column:2/4}}
+.ix{font-family:var(--mono);font-size:12px;color:var(--ink45)}
+.ttl{font-weight:800;font-size:clamp(17px,2.1vw,22px);letter-spacing:-.025em}
+.ttl small{display:block;font-family:var(--mono);font-weight:400;font-size:11.5px;letter-spacing:.02em;
+  color:var(--ink45);margin-top:4px;text-transform:none}
+.stk{font-family:var(--mono);font-size:11.5px;color:var(--ink70);line-height:1.5}
+.stat{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--rule);padding:5px 9px;border-radius:2px;
+  justify-self:start;background:var(--paper)}
+.stat::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.stat.live{color:var(--green)}
+.stat.bld{color:var(--orange)}
+.stat.shp{color:var(--blue)}
+.chev{font-family:var(--mono);font-size:17px;color:var(--ink45);justify-self:end;transition:transform .2s}
+.rowbtn[aria-expanded="true"] .chev{transform:rotate(45deg)}
+.panel{padding:0 16px 22px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px}
+.panel[hidden]{display:none}
+@media (max-width:860px){.panel{grid-template-columns:1fr;padding-inline:16px}}
+.panel ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;max-width:78ch}
+.panel li{position:relative;padding-left:22px;color:var(--ink70);font-size:14.5px}
+.panel li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:1.5px;background:var(--blue)}
+.plink{margin-top:15px;display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12px}
+.plink a{color:var(--blue);text-decoration:none;border-bottom:1.5px solid var(--blue);padding-bottom:1px}
+.plink span{color:var(--ink45)}
+.minis{display:grid;grid-template-columns:repeat(auto-fit,minmax(236px,1fr));gap:-1.5px;margin-bottom:clamp(30px,4vw,52px);
+  border:1.5px solid var(--rule);background:var(--rule);gap:1.5px}
+.mini{background:var(--paper);padding:18px}
+.mini h4{font-size:16px;letter-spacing:-.02em;font-weight:800}
+.mini p{font-size:13.5px;color:var(--ink70);margin-top:7px;line-height:1.5}
+.mini .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink45);margin-top:11px;display:block}
+
+/* ---------- experience ---------- */
+.exp{padding-bottom:clamp(30px,4vw,52px)}
+.job{display:grid;grid-template-columns:184px minmax(0,1fr);gap:clamp(16px,3vw,40px);padding-block:26px;border-top:1px solid var(--hair)}
+.job:first-child{border-top:1.5px solid var(--rule)}
+@media (max-width:760px){.job{grid-template-columns:1fr;gap:10px}}
+.job .when{font-family:var(--mono);font-size:12px;color:var(--ink45);letter-spacing:.06em}
+.job .when b{display:block;color:var(--ink);font-weight:600;font-size:13px;margin-bottom:3px}
+.job h3{font-size:clamp(20px,2.6vw,27px);letter-spacing:-.03em}
+.job h3 span{color:var(--blue)}
+.job ul{margin:13px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.job li{position:relative;padding-left:22px;color:var(--ink70);font-size:14.5px;max-width:76ch}
+.job li::before{content:"";position:absolute;left:0;top:.62em;width:11px;height:1.5px;background:var(--orange)}
+
+/* ---------- stack ---------- */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5px;background:var(--rule);
+  border:1.5px solid var(--rule);margin-bottom:clamp(30px,4vw,52px)}
+.sg{background:var(--paper);padding:18px}
+.sg h3{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:13px}
+.sg ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.sg li{font-family:var(--mono);font-size:12px;border:1.2px solid var(--hair);background:#fff;padding:5px 9px;border-radius:2px}
+
+/* ---------- credentials + education ---------- */
+.two{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(22px,4vw,48px);padding-bottom:clamp(34px,5vw,60px)}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.cl{display:grid;border:1.5px solid var(--rule);background:#fff}
+.ci{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:12px 15px;border-bottom:1px solid var(--hair);font-size:14px}
+.ci:last-child{border-bottom:0}
+.ci .m{font-family:var(--mono);font-size:12px;color:var(--blue)}
+.ci .y{font-family:var(--mono);font-size:11px;color:var(--ink45);white-space:nowrap}
+.ci b{font-weight:600}
+.ci em{font-style:normal;color:var(--ink70)}
+.erow{border:1.5px solid var(--rule);background:#fff;padding:15px;margin-bottom:12px;display:grid;
+  grid-template-columns:minmax(0,1fr) auto;gap:10px 16px}
+.erow:last-child{margin-bottom:0}
+.erow h3{font-size:17px;letter-spacing:-.02em}
+.erow p{font-family:var(--mono);font-size:12px;color:var(--ink45);margin-top:6px}
+.erow .y{font-family:var(--mono);font-size:12px;color:var(--blue);white-space:nowrap}
+
+/* ---------- contact / whatsapp ---------- */
+.contact{background:var(--ink);color:var(--paper)}
+.contact .sh h2{color:var(--paper)}
+.contact .sh .r{background:rgba(246,244,239,.3)}
+.contact .sh .t,.contact .lbl{color:#9A9AA4}
+.cwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,56px);padding-bottom:clamp(36px,5vw,64px)}
+@media (max-width:900px){.cwrap{grid-template-columns:1fr}}
+.cbig{font-size:clamp(26px,3.6vw,44px);letter-spacing:-.04em;font-weight:900;line-height:1.02}
+.cbig span{color:#2BE07A}
+.cnote{color:#B2B2BB;margin-top:16px;max-width:46ch;font-size:15px}
+.clist{margin-top:26px;display:grid;gap:1.5px;background:rgba(246,244,239,.22);border:1.5px solid rgba(246,244,239,.22)}
+.cit{background:var(--ink);display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 15px;flex-wrap:wrap}
+.cit .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8E8E98}
+.cit .v{font-family:var(--mono);font-size:14px;word-break:break-all}
+.cit a.v{text-decoration:none;border-bottom:1px solid rgba(246,244,239,.4)}
+.cit a.v:hover{color:#2BE07A;border-color:#2BE07A}
+.cp{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:transparent;
+  color:#B2B2BB;border:1px solid rgba(246,244,239,.3);border-radius:2px;padding:5px 9px;cursor:pointer}
+.cp:hover{color:#2BE07A;border-color:#2BE07A}
+
+.wform{background:var(--paper);color:var(--ink);border:1.5px solid var(--paper);box-shadow:8px 8px 0 #2BE07A}
+.wform .hd{background:#25D366;color:#06270F;padding:12px 18px;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.16em;text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:9px}
+.wform .hd svg{width:16px;height:16px;fill:currentColor}
+.wform .bd{padding:18px}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink45);margin-bottom:6px}
+.fld input,.fld select,.fld textarea{
+  width:100%;font-family:var(--mono);font-size:14px;color:var(--ink);background:#fff;
+  border:1.5px solid var(--rule);border-radius:2px;padding:10px 12px;
+}
+.fld textarea{resize:vertical;min-height:92px;line-height:1.5}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2.5px solid var(--blue);outline-offset:1px}
+.prev{background:#E7F7EC;border:1.5px dashed #25D366;border-radius:2px;padding:11px 13px;font-family:var(--mono);
+  font-size:12px;line-height:1.6;color:#0C3A20;white-space:pre-wrap;word-break:break-word;max-height:132px;overflow:auto}
+.sendrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.btn.green{background:#25D366;color:#06270F;box-shadow:4px 4px 0 var(--ink)}
+.hint{font-family:var(--mono);font-size:10.5px;color:var(--ink45);line-height:1.55;margin-top:12px}
+
+footer{background:var(--ink);color:#8E8E98;border-top:1px solid rgba(246,244,239,.18)}
+footer .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:22px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="top band">
+  <div class="in">
+    <span class="nm">Vedant Kedia</span>
+    <span class="st"><i class="blip"></i> Available · 2027</span>
+    <span class="sp"></span>
+    <span class="st" id="clock" aria-live="off">—— IST</span>
+    <a class="wa" href="#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.3 1.3-1.9 1.3-.5 0-1.1.2-3.6-.8-3-1.3-5-4.4-5.1-4.6-.2-.2-1.2-1.6-1.2-3.1 0-1.5.8-2.2 1-2.5.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .7.5l1 2.3c.1.2.1.4 0 .6l-.4.6-.3.3c-.1.2-.3.3-.1.6.2.3.8 1.4 1.8 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.2.5.1.6 0l1-1.2c.2-.3.4-.2.7-.1l2.2 1c.3.2.5.3.6.4.1.2.1.8-.1 1.5Z"/></svg> Message</a>
+  </div>
+</div>
+
+<header class="hero band">
+  <div class="in">
+    <div class="heroTop">
+      <span class="lbl">Portfolio / 2026 edition</span>
+      <span class="lbl">Dehradun, India · 30.32°N 78.03°E</span>
+    </div>
+
+    <h1 class="flip" id="flip" aria-label="Vedant Kedia">
+      <span class="l1" data-word="VEDANT"></span>
+      <span class="l2" data-word="KEDIA"></span>
+    </h1>
+
+    <div class="heroGrid">
+      <div>
+        <p class="roleline">I build <span class="rot" id="rot">automation platforms</span><span class="cur"></span></p>
+        <p class="sub">Final-year CSE student at UPES Dehradun. I take a requirement from a stakeholder and carry it all the way to the thing that actually messages a customer at 9am — spec, API, database, the scheduled job, the tests that keep it honest.</p>
+        <div class="heroCta">
+          <a class="btn" href="#work">See the board</a>
+          <a class="btn alt" href="#contact">WhatsApp me</a>
+          <a class="btn dark" href="https://github.com/vedant-23-kedia" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <div class="facts">
+        <div class="fact"><span>Status</span><b>Open to 2027 roles</b></div>
+        <div class="fact"><span>Focus</span><b>AI/ML · Backend</b></div>
+        <div class="fact"><span>Shipped</span><b>7 projects</b></div>
+        <div class="fact"><span>Internships</span><b>2 completed</b></div>
+        <div class="fact"><span>Graduating</span><b>B.Tech CSE, 2027</b></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="ticker band" aria-hidden="true">
+  <div class="track" id="track"></div>
+</div>
+
+<section id="about" class="band">
+  <div class="in">
+    <div class="sh"><span class="n">01</span><h2>About</h2><span class="r"></span><span class="t">the short version</span></div>
+    <div class="about">
+      <div>
+        <p class="quote">Most AI demos die the moment a real user does something <em>unexpected.</em> I'm interested in the part after that.</p>
+        <p>I started writing C in a university lab and ended up building platforms that talk to actual customers. The through-line hasn't changed: work out what someone really needs, then make a machine do it reliably at 3am without anyone watching.</p>
+        <p>My work sits where AI meets plumbing. A Gemini-backed engagement platform for a startup client. A guard layer that inspects LLM requests before they reach the model. A tracker that reads a Gmail inbox and keeps a spreadsheet honest. Less model research, more getting models to behave in production.</p>
+        <p>Two internships taught me the unglamorous half — eliciting requirements from stakeholders at Planstalk, and executing test cases against Spatial AI and AR builds at Multiset AI. I write the spec, build it, then try to break it.</p>
+      </div>
+      <div class="spec">
+        <div class="hd">Operator specification</div>
+        <dl>
+          <div class="row"><dt>Name</dt><dd>Vedant Kedia</dd></div>
+          <div class="row"><dt>Role</dt><dd>AI/ML Engineer · Builder</dd></div>
+          <div class="row"><dt>Based</dt><dd>Dehradun, Uttarakhand</dd></div>
+          <div class="row"><dt>School</dt><dd>UPES Dehradun</dd></div>
+          <div class="row"><dt>Degree</dt><dd>B.Tech CSE, 2027</dd></div>
+          <div class="row"><dt>Building</dt><dd>OmniReach, PromptGuard</dd></div>
+          <div class="row"><dt>Leads</dt><dd>PR Head, Dharohar Club</dd></div>
+          <div class="row"><dt>Reply time</dt><dd>Usually within a day</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="band">
+  <div class="in">
+    <div class="sh"><span class="n">02</span><h2>The Board</h2><span class="r"></span><span class="t">tap a row to open it</span></div>
+
+    <div class="board">
+      <div class="bhd"><span>No.</span><span>Project</span><span>Stack</span><span>Status</span><span></span></div>
+
+      <div class="row2">
+        <button class="rowbtn" type="button" aria-expanded="true" aria-controls="p1">
+          <span class="ix">01</span>
+          <span class="ttl">OmniReach<small>Customer engagement automation · Oct 2026 — present</small></span>
+          <span class="stk">Python · FastAPI · PostgreSQL · Docker · Gemini</span>
+          <span class="stat live">Live</span>
+          <span class="chev">+</span>
+        </button>
+        <div class="panel" id="p1">
+          <span></span>
+          <div>
+            <ul>
+              <li>Automates customer conversations across WhatsApp, Instagram and Messenger from one scheduling layer.</li>
+              <li>Gathered requirements straight from a startup client, including approval workflows so nothing publishes unreviewed.</li>
+              <li>Modeled enquiries and meeting dates in PostgreSQL, with scheduled jobs producing daily summary reports.</li>
+            </ul>
+            <div class="plink"><span>Client work · private repository</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p2">
+          <span class="ix">02</span>
+          <span class="ttl">AppliTrack<small>Workflow tracking &amp; reporting · 2026</small></span>
+          <span class="stk">Python · Flask · SQLite · Pub/Sub · Docker</span>
+          <span class="stat shp">Shipped</span>
+          <span class="chev">+</span>
+        </button>
+        <div class="panel" id="p2" hidden>
+          <span></span>
+          <div>
+            <ul>
+              <li>Reads a Gmail inbox and works out which job applications are live, rejected, or waiting on you.</li>
+              <li>Mapped the process into 8 defined workflow states with a pipeline that tracks every record through them.</li>
+              <li>Real-time sync plus a scheduled daily digest, validated by 46 automated tests.</li>
+              <li>Per-user data isolation and access control — one person's inbox never leaks into another's.</li>
+            </ul>
+            <div class="plink"><a href="https://github.com/vedant-23-kedia/applitrack" target="_blank" rel="noopener">Source →</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p3">
+          <span class="ix">03</span>
+          <span class="ttl">PromptGuard<small>AI monitoring &amp; audit layer · 2026</small></span>
+          <span class="stk">Python · Ollama · ChromaDB · Embeddings</span>
+          <span class="stat bld">Building</span>
+          <span class="chev">+</span>
+        </button>
+        <div class="panel" id="p3" hidden>
+          <span></span>
+          <div>
+            <ul>
+              <li>Inspects AI requests in real time and blocks unsafe inputs before they ever reach the model.</li>
+              <li>Screens prompts against a local embedding index, so detection runs without shipping user text to a third party.</li>
+              <li>Keeps a full audit trail of every flagged request for quality and compliance review.</li>
+            </ul>
+            <div class="plink"><span>In progress</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <button class="rowbtn" type="button" aria-expanded="false" aria-controls="p4">
+          <span class="ix">04</span>
+          <span class="ttl">GhostTrace Sentinel<small>Code governance dashboard · 2026</small></span>
+          <span class="stk">JavaScript · HTML · LLM · Git</span>
+          <span class="stat shp">Shipped</span>
+          <span class="chev">+</span>
+        </button>
+        <div class="panel" id="p4" hidden>
+          <span></span>
+          <div>
+            <ul>
+              <li>Validates frontend code against the business requirements it was meant to satisfy, then issues a PASS/FAIL audit report.</li>
+              <li>Turns written requirements into checkable assertions against committed code.</li>
+              <li>Ties reports to the Git commit workflow, so a failing change is traceable to its diff.</li>
+            </ul>
+            <div class="plink"><a href="https://github.com/vedant-23-kedia/GhostTrace-Sentinel" target="_blank" rel="noopener">Source →</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="minis">
+      <div class="mini"><h4>AI Mind Reader</h4><p>Akinator-style guesser that pins down one of 117 objects from yes/no answers, narrowing by information gain.</p><span class="tag">Python · ML</span></div>
+      <div class="mini"><h4>Badminton Record System</h4><p>Player records with login, full CRUD and search — built while learning how to structure a real schema.</p><span class="tag">Python</span></div>
+      <div class="mini"><h4>Python + SQL Records</h4><p>Records system for small sports organisations, joining a Python front end to a normalised SQL back end.</p><span class="tag">Python · SQL</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="band">
+  <div class="in exp">
+    <div class="sh"><span class="n">03</span><h2>Experience</h2><span class="r"></span><span class="t">two internships</span></div>
+    <div class="job">
+      <div class="when"><b>Jun — Jul 2026</b>2 months · on-site</div>
+      <div>
+        <h3>SDE Intern <span>/ Planstalk</span></h3>
+        <ul>
+          <li>Elicited requirements from stakeholders and translated them into functional specifications for a housing brokerage platform.</li>
+          <li>Mapped user workflows and documented data flows and access rules across 5+ distinct user roles.</li>
+          <li>Produced structured research documentation with comparison tables to steer the team's development approach.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when"><b>Jun — Jul 2025</b>8 weeks</div>
+      <div>
+        <h3>Intern <span>/ Multiset AI</span></h3>
+        <ul>
+          <li>Executed test cases for Spatial AI and AR applications, validating delivered features against expected behaviour.</li>
+          <li>Tracked and documented defects in structured reports, supporting fixes that improved product quality.</li>
+          <li>Worked with a cross-functional team of engineers and testers to confirm solutions met stated requirements.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack" class="band">
+  <div class="in">
+    <div class="sh"><span class="n">04</span><h2>Stack</h2><span class="r"></span><span class="t">what I reach for</span></div>
+    <div class="stack">
+      <div class="sg"><h3>Languages</h3><ul><li>Python</li><li>SQL</li><li>C</li><li>C++</li><li>JavaScript</li><li>HTML/CSS</li></ul></div>
+      <div class="sg"><h3>AI &amp; ML</h3><ul><li>LLM Integration</li><li>Google Gemini</li><li>Ollama</li><li>Vector Embeddings</li><li>ChromaDB</li><li>Prompt Safety</li></ul></div>
+      <div class="sg"><h3>Backend &amp; Data</h3><ul><li>FastAPI</li><li>Flask</li><li>PostgreSQL</li><li>SQLite</li><li>REST APIs</li><li>Pub/Sub</li><li>Pandas</li></ul></div>
+      <div class="sg"><h3>Tooling</h3><ul><li>Docker</li><li>Git</li><li>GitHub</li><li>Postman</li><li>Power BI</li><li>Tableau</li><li>Figma</li></ul></div>
+      <div class="sg"><h3>Practice</h3><ul><li>Requirement Elicitation</li><li>Functional Specs</li><li>Workflow Mapping</li><li>System Testing</li><li>UAT</li><li>Defect Tracking</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="credentials" class="band">
+  <div class="in">
+    <div class="sh"><span class="n">05</span><h2>Record</h2><span class="r"></span><span class="t">certificates, roles, education</span></div>
+    <div class="two">
+      <div class="cl">
+        <div class="ci"><span class="m">✓</span><span><b>Deloitte Data Analytics Job Simulation</b> <em>— Forage</em></span><span class="y">Jul 2025</span></div>
+        <div class="ci"><span class="m">✓</span><span><b>SQL Certification</b></span><span class="y">2024</span></div>
+        <div class="ci"><span class="m">✓</span><span><b>C Programming Certification</b></span><span class="y">2023</span></div>
+        <div class="ci"><span class="m">★</span><span><b>Top 50 teams</b> <em>— Smart India Hackathon 2026, Internal Round, UPES</em></span><span class="y">Aug–Sep 26</span></div>
+        <div class="ci"><span class="m">◆</span><span><b>PR Head</b> <em>— Dharohar Club, UPES</em></span><span class="y">Current</span></div>
+        <div class="ci"><span class="m">◆</span><span><b>Head of Technical Team</b> <em>— Robotics Club</em></span><span class="y">2025</span></div>
+        <div class="ci"><span class="m">◆</span><span><b>Head of Logistics</b> <em>— Robotics Club</em></span><span class="y">2024</span></div>
+        <div class="ci"><span class="m">◆</span><span><b>Member</b> <em>— National Service Scheme</em></span><span class="y">—</span></div>
+      </div>
+      <div>
+        <div class="erow"><div><h3>B.Tech, Computer Science &amp; Engineering</h3><p>UPES, Dehradun</p></div><span class="y">2023 — 27</span></div>
+        <div class="erow"><div><h3>Class XII · CBSE</h3><p>Seven Hills Residential School, Sambalpur · 78.2%</p></div><span class="y">2021 — 23</span></div>
+        <div class="erow"><div><h3>Class X · CBSE</h3><p>Indian Public School, Sambalpur · 80.8%</p></div><span class="y">2019 — 21</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="in">
+    <div class="sh"><span class="n" style="color:#2BE07A">06</span><h2>Say Hello</h2><span class="r"></span><span class="t">goes straight to my phone</span></div>
+    <div class="cwrap">
+      <div>
+        <p class="cbig">Write a line. It lands in my <span>WhatsApp.</span></p>
+        <p class="cnote">Fill the form and it opens WhatsApp with the message already typed — you just hit send. Recruiters, collaborators, or anyone who wants to argue about whether LLMs need guardrails.</p>
+        <div class="clist">
+          <div class="cit"><span class="k">WhatsApp</span><span class="v">+91 98612 53086</span><button class="cp" type="button" data-copy="+919861253086">Copy</button></div>
+          <div class="cit"><span class="k">Email</span><a class="v" href="mailto:vedantkedia9@gmail.com">vedantkedia9@gmail.com</a><button class="cp" type="button" data-copy="vedantkedia9@gmail.com">Copy</button></div>
+          <div class="cit"><span class="k">LinkedIn</span><a class="v" href="https://linkedin.com/in/vedant-kedia" target="_blank" rel="noopener">in/vedant-kedia</a><button class="cp" type="button" data-copy="https://linkedin.com/in/vedant-kedia">Copy</button></div>
+          <div class="cit"><span class="k">GitHub</span><a class="v" href="https://github.com/vedant-23-kedia" target="_blank" rel="noopener">vedant-23-kedia</a><button class="cp" type="button" data-copy="https://github.com/vedant-23-kedia">Copy</button></div>
+        </div>
+      </div>
+
+      <div class="wform">
+        <div class="hd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.6 14.1c-.2.7-1.3 1.3-1.9 1.3-.5 0-1.1.2-3.6-.8-3-1.3-5-4.4-5.1-4.6-.2-.2-1.2-1.6-1.2-3.1 0-1.5.8-2.2 1-2.5.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .7.5l1 2.3c.1.2.1.4 0 .6l-.4.6-.3.3c-.1.2-.3.3-.1.6.2.3.8 1.4 1.8 2.3 1.3 1.1 2.3 1.5 2.6 1.6.3.2.5.1.6 0l1-1.2c.2-.3.4-.2.7-.1l2.2 1c.3.2.5.3.6.4.1.2.1.8-.1 1.5Z"/></svg> Compose message</div>
+        <div class="bd">
+          <form id="waform" novalidate>
+            <div class="fld">
+              <label for="wname">Your name</label>
+              <input id="wname" name="wname" type="text" autocomplete="name" placeholder="Ananya Sharma">
+            </div>
+            <div class="fld">
+              <label for="wtopic">What's this about</label>
+              <select id="wtopic" name="wtopic">
+                <option>A role / internship</option>
+                <option>Freelance or client work</option>
+                <option>Collaborating on a project</option>
+                <option>A question about something you built</option>
+                <option>Just saying hello</option>
+              </select>
+            </div>
+            <div class="fld">
+              <label for="wmsg">Message</label>
+              <textarea id="wmsg" name="wmsg" placeholder="Saw PromptGuard — how are you handling false positives?"></textarea>
+            </div>
+            <div class="fld">
+              <label for="wprev">Preview</label>
+              <div class="prev" id="wprev" aria-live="polite"></div>
+            </div>
+            <div class="sendrow">
+              <a class="btn green" id="wsend" href="#" target="_blank" rel="noopener">Open WhatsApp →</a>
+              <button class="btn alt" id="wcopy" type="button">Copy text</button>
+            </div>
+            <p class="hint">Opens WhatsApp (app or web) with this message pre-filled to +91 98612 53086. You press send — nothing is transmitted from this page, and nothing is stored here.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="in">
+    <span>© <span id="yr">2026</span> Vedant Kedia</span>
+    <span>Dehradun, IN · Built from scratch</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var PHONE='919861253086';
+  var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
+
+  /* ---- split-flap hero ---- */
+  var GLYPH='ABCDEFGHIJKLMNOPQRSTUVWXYZ#@%&$0123456789';
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Array.prototype.forEach.call(document.querySelectorAll('#flip span[data-word]'),function(el,wi){
+    var word=el.getAttribute('data-word'),frag=document.createDocumentFragment();
+    for(var i=0;i<word.length;i++){
+      var s=document.createElement('span');
+      s.className='ch';s.textContent=word[i];
+      frag.appendChild(s);
+    }
+    el.appendChild(frag);
+    if(reduce) return;
+    var chars=el.querySelectorAll('.ch');
+    Array.prototype.forEach.call(chars,function(c,i){
+      var target=c.textContent,spins=7+i*2+wi*4,n=0;
+      c.textContent=GLYPH[Math.floor(Math.random()*GLYPH.length)];
+      var t=setInterval(function(){
+        n++;
+        if(n>=spins){clearInterval(t);c.textContent=target;return;}
+        c.textContent=GLYPH[Math.floor(Math.random()*GLYPH.length)];
+      },38);
+    });
+  });
+
+  /* ---- rotating role ---- */
+  var words=['automation platforms','LLM guardrails','data pipelines','things that run at 3am','APIs people trust'];
+  var rot=document.getElementById('rot'),ri=0;
+  if(rot&&!reduce){
+    setInterval(function(){
+      ri=(ri+1)%words.length;
+      rot.style.transition='opacity .18s';rot.style.opacity='0';
+      setTimeout(function(){rot.textContent=words[ri];rot.style.opacity='1';},190);
+    },2600);
+  }
+
+  /* ---- ticker ---- */
+  var items=['Python','FastAPI','PostgreSQL','Docker','Google Gemini','Ollama','ChromaDB','Flask','SQL','Pub/Sub',
+             'Requirement Elicitation','System Testing','UAT','Power BI','Pandas','Workflow Mapping','REST APIs'];
+  var track=document.getElementById('track');
+  if(track){
+    var html='';
+    for(var r=0;r<2;r++){
+      items.forEach(function(it){html+='<span>'+it+'</span><i>✦</i>';});
+    }
+    track.innerHTML=html;
+  }
+
+  /* ---- clock ---- */
+  function tick(){
+    var el=document.getElementById('clock'); if(!el) return;
+    try{
+      var s=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Kolkata'}).format(new Date());
+      el.textContent=s+' IST';
+    }catch(e){ el.textContent='IST'; }
+  }
+  tick(); setInterval(tick,20000);
+
+  /* ---- board accordion ---- */
+  Array.prototype.forEach.call(document.querySelectorAll('.rowbtn'),function(btn){
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      var panel=document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded',String(!open));
+      if(panel) panel.hidden=open;
+    });
+  });
+
+  /* ---- copy buttons ---- */
+  function copyText(txt,btn){
+    var done=function(){var o=btn.textContent;btn.textContent='Copied';setTimeout(function(){btn.textContent=o;},1400);};
+    function fallback(){
+      var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');done();}catch(e){btn.textContent='Select it manually';}
+      ta.remove();
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(fallback);
+    }else{fallback();}
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'),function(b){
+    b.addEventListener('click',function(){copyText(b.getAttribute('data-copy'),b);});
+  });
+
+  /* ---- whatsapp composer ---- */
+  var nameEl=document.getElementById('wname'),topicEl=document.getElementById('wtopic'),
+      msgEl=document.getElementById('wmsg'),prevEl=document.getElementById('wprev'),
+      sendEl=document.getElementById('wsend'),copyEl=document.getElementById('wcopy');
+
+  function compose(){
+    var n=(nameEl.value||'').trim(),t=topicEl.value,m=(msgEl.value||'').trim();
+    var line1='Hi Vedant — '+(n?n+' here.':'saw your portfolio.');
+    var line2='About: '+t+'.';
+    var line3=m||'(no message yet — type one above)';
+    return line1+'\n'+line2+'\n\n'+line3;
+  }
+  function refresh(){
+    var text=compose();
+    prevEl.textContent=text;
+    sendEl.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(text);
+  }
+  if(nameEl&&topicEl&&msgEl&&prevEl&&sendEl){
+    ['input','change'].forEach(function(ev){
+      nameEl.addEventListener(ev,refresh);topicEl.addEventListener(ev,refresh);msgEl.addEventListener(ev,refresh);
+    });
+    refresh();
+    copyEl.addEventListener('click',function(){copyText(compose(),copyEl);});
+    document.getElementById('waform').addEventListener('submit',function(e){e.preventDefault();window.open(sendEl.href,'_blank','noopener');});
+  }
+})();
+</script>
+</body></html>
